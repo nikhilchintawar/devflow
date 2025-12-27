@@ -42,20 +42,6 @@ for cmd in "${COMMANDS[@]}"; do
     fi
 done
 
-# Remove hooks if in project mode
-if [ "$1" = "--project" ] && [ -d ".claude/hooks" ]; then
-    echo ""
-    echo "🧹 Removing hooks..."
-    if [ -f ".claude/hooks/session-start.sh" ]; then
-        echo "   Removing SessionStart hook..."
-        rm -f ".claude/hooks/session-start.sh"
-        # Remove hooks directory if empty
-        if [ -z "$(ls -A .claude/hooks)" ]; then
-            rmdir .claude/hooks
-        fi
-    fi
-fi
-
 echo ""
 echo -e "${GREEN}✅ DevFlow commands uninstalled successfully!${NC}"
 echo ""
