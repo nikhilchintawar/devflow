@@ -1,3 +1,8 @@
+---
+description: "Analyze codebase and generate .claude/ context files"
+model: "sonnet"
+---
+
 # ROLE
 
 You are a Senior Staff Engineer performing **code-based reality analysis**.

@@ -1,3 +1,8 @@
+---
+description: "Load project context from .claude/ files and prepare for development"
+model: "sonnet"
+---
+
 # SESSION START - Load Project Context
 
 Load pre-generated context files and prepare for development work.
