@@ -34,13 +34,27 @@ fi
 echo ""
 echo "🧹 Removing commands..."
 for cmd in "${COMMANDS[@]}"; do
-    if [ -d "${INSTALL_DIR}/${cmd}" ]; then
+    if [ -f "${INSTALL_DIR}/${cmd}.md" ]; then
         echo "   Removing /${cmd}..."
-        rm -rf "${INSTALL_DIR}/${cmd}"
+        rm -f "${INSTALL_DIR}/${cmd}.md"
     else
         echo -e "   ${YELLOW}⚠️  /${cmd} not found (already removed?)${NC}"
     fi
 done
+
+# Remove hooks if in project mode
+if [ "$1" = "--project" ] && [ -d ".claude/hooks" ]; then
+    echo ""
+    echo "🧹 Removing hooks..."
+    if [ -f ".claude/hooks/session-start.sh" ]; then
+        echo "   Removing SessionStart hook..."
+        rm -f ".claude/hooks/session-start.sh"
+        # Remove hooks directory if empty
+        if [ -z "$(ls -A .claude/hooks)" ]; then
+            rmdir .claude/hooks
+        fi
+    fi
+fi
 
 echo ""
 echo -e "${GREEN}✅ DevFlow commands uninstalled successfully!${NC}"

@@ -26,12 +26,20 @@ Install commands globally to use across all projects:
 curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/install.sh | bash
 ```
 
-### Project-Specific Install
+### Global + Hooks (Recommended)
 
-Install to current project only:
+Install commands globally, add hooks to current project:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/install.sh | bash -s -- --project
+curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/install.sh | bash -s -- --with-hooks
+```
+
+### Project-Specific Install
+
+Install everything to current project only:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/install.sh | bash -s -- --project --with-hooks
 ```
 
 ### Manual Install
@@ -150,7 +158,12 @@ curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/uninsta
 Or manually:
 
 ```bash
-rm -rf ~/.claude/commands/setup ~/.claude/commands/start
+# Remove global commands
+rm -f ~/.claude/commands/setup.md ~/.claude/commands/start.md
+
+# Remove project commands and hooks
+rm -f .claude/commands/setup.md .claude/commands/start.md
+rm -f .claude/hooks/session-start.sh
 ```
 
 ## Development
@@ -160,11 +173,12 @@ rm -rf ~/.claude/commands/setup ~/.claude/commands/start
 ```
 devflow/
 ├── commands/
-│   ├── setup/
-│   │   └── setup.md         # /setup command
-│   └── start/
-│       ├── start.md         # /start command
-│       └── reference.md     # Reference documentation
+│   ├── setup.md             # /setup command
+│   ├── start.md             # /start command
+│   └── reference.md         # Reference documentation
+├── hooks/
+│   ├── session-start.sh     # SessionStart hook script
+│   └── settings.json        # Hook configuration template
 ├── install.sh               # Installation script
 ├── uninstall.sh            # Uninstall script
 └── README.md               # This file
@@ -185,10 +199,54 @@ claude
 
 ## How It Works
 
-1. **Installation** - Copies command files to `~/.claude/commands/`
+1. **Installation** - Copies command files to `~/.claude/commands/` (global) or `.claude/commands/` (project)
 2. **Discovery** - Claude Code automatically discovers commands
 3. **Execution** - Commands run as prompts when invoked
 4. **Context** - Generated files persist in `.claude/` (commit to git)
+5. **Hooks (Optional)** - SessionStart hook shows helpful reminders automatically
+
+## SessionStart Hook (Hybrid Approach)
+
+DevFlow includes an optional SessionStart hook that provides a **lightweight, non-intrusive** reminder system:
+
+### What It Does
+
+When Claude Code starts, the hook:
+- ✅ Shows helpful tips about `/setup` and `/start` commands
+- ✅ Reminds you when context is available
+- ✅ Shows when context was last updated
+- ❌ **Does NOT auto-load context** (keeps your control)
+- ❌ **Does NOT add context tokens** to every session
+
+### Installing the Hook
+
+```bash
+# Recommended: Global commands + hooks in current project
+curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/install.sh | bash -s -- --with-hooks
+
+# Or: Everything in current project
+curl -sSL https://raw.githubusercontent.com/nikhilchintawar/devflow/main/install.sh | bash -s -- --project --with-hooks
+```
+
+### Example Output
+
+```
+📚 DevFlow context available
+
+Commands:
+  /start  - Load project context and begin development
+  /setup  - Regenerate context files (run after major changes)
+
+📅 Context last updated: 2025-12-27 14:30
+```
+
+### Why Hybrid?
+
+This approach gives you the best of both worlds:
+- **Automatic reminders** - Never forget DevFlow is available
+- **Manual control** - You choose when to load context with `/start`
+- **Zero overhead** - Hook runs instantly, adds no tokens
+- **Flexible** - Skip `/start` when you don't need full context
 
 ## Best Practices
 
