@@ -8,6 +8,7 @@ DevFlow provides powerful slash commands for Claude Code CLI that analyze your c
 
 - **`/setup`** - Analyzes your codebase and generates comprehensive `.claude/` context files
 - **`/start`** - Loads project context to prepare Claude for development work
+- **`/update`** - Refreshes context files as your codebase evolves, preserving human edits
 - **Code-first analysis** - Trust what the code does, not what docs claim
 - **Zero speculation** - Every claim is labeled as DETECTED, INFERRED, or UNKNOWN
 - **Risk zone detection** - Automatically identifies sensitive areas (payments, auth, etc.)
@@ -82,6 +83,20 @@ This will:
 - Prepare Claude with project-specific constraints
 - Wait for your development task
 
+### 3. Update Context (As Needed)
+
+When your codebase changes significantly:
+
+```
+/update
+```
+
+This will:
+- Scan codebase for changes since last update
+- Compare with existing `.claude/` files
+- Show summary of detected changes
+- Update files while preserving your manual edits
+
 ### Example Workflow
 
 ```bash
@@ -97,6 +112,13 @@ $ claude
 > /start
 # Context loaded, ready to work
 > Add user authentication using JWT
+
+# After major refactoring
+$ claude
+> /update
+# Review changes detected
+> apply
+# Updated context committed to git
 ```
 
 ## What Gets Generated
@@ -195,20 +217,24 @@ claude
 ## Best Practices
 
 - **Commit `.claude/` files** - Share context with your team
-- **Run `/setup` after major refactors** - Keep context fresh
+- **Run `/update` after significant changes** - Keep context fresh without losing edits
 - **Review generated files** - Edit UNKNOWN items with actual info
 - **Use `/start` every session** - Ensures Claude has full context
+- **Preserve human edits** - `/update` keeps your customizations, `/setup` regenerates from scratch
 
 ## FAQ
 
 **Q: Do I need to run `/setup` every time?**
-A: No! Only run `/setup` once per project (or when architecture changes significantly). Run `/start` at the beginning of each development session.
+A: No! Only run `/setup` once per project. Use `/update` to refresh context as code evolves. Run `/start` at the beginning of each development session.
 
 **Q: Can I edit the generated `.claude/` files?**
 A: Yes! The files are marked as DRAFT. Review and edit them to add project-specific knowledge that can't be detected from code.
 
+**Q: What's the difference between `/setup` and `/update`?**
+A: `/setup` generates context from scratch (use for new projects). `/update` refreshes existing context while preserving your manual edits (use after code changes).
+
 **Q: What if my project is too large?**
-A: The `/setup` command has built-in scaling strategies. For 500+ files, it focuses on structure and entry points rather than deep analysis.
+A: The `/setup` and `/update` commands have built-in scaling strategies. For 500+ files, they focus on structure and entry points rather than deep analysis.
 
 **Q: Can teams use this?**
 A: Absolutely! Commit the `.claude/` directory to git. Team members just need to run `/start` to load the shared context.

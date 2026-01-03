@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 INSTALL_DIR="${HOME}/.claude/commands"
-COMMANDS=("setup" "start")
+COMMANDS=("setup" "start" "update")
 
 echo ""
 echo "🗑️  DevFlow - Uninstaller"

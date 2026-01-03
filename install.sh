@@ -10,7 +10,7 @@ NC='\033[0m' # No Color
 # Configuration
 INSTALL_DIR="${HOME}/.claude/commands"
 REPO_URL="https://raw.githubusercontent.com/nikhilchintawar/devflow/main"
-COMMANDS=("setup" "start")
+COMMANDS=("setup" "start" "update")
 
 echo ""
 echo "📦 DevFlow - Claude Code Command Installer"
